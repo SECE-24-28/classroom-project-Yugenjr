@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mobile Recharge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="relative min-h-screen text-white font-sans"
+  style="background-image: url('https://i.pinimg.com/736x/a4/42/32/a442321136975e5c5dfb57a8d1f04e3a.jpg'); background-size: cover; background-position: center;">
+
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black/50"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 flex flex-col items-center justify-start min-h-screen p-6 space-y-8">
+    <!-- Recharge Form -->
+    <div class="bg-white/80 backdrop-blur-md p-8 rounded-lg shadow-lg w-full max-w-md text-gray-900 space-y-6 mt-12">
+      <h2 class="text-2xl font-bold text-center bg-gradient-to-r from-red-500 via-pink-400 to-red-500 bg-clip-text text-transparent">
+        Mobile Recharge
+      </h2>
+
+      <input type="text" id="mobileInput" placeholder="Enter Mobile Number" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none" />
+
+      <input type="text" id="amountInput" placeholder="Enter Amount" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none" />
+
+      <button id="rechargeBtn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+        Recharge Now
+      </button>
+
+      <div id="planDetails" class="text-sm text-center text-gray-700"></div>
+      <div id="confirmationMessage" class="text-center text-green-600 font-semibold mt-4"></div>
+    </div>
+
+    <!-- Toggle Button -->
+    <button id="toggleHistoryBtn" class="bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition shadow-md">
+      View Recharge History
+    </button>
+
+    <!-- Recharge History -->
+    <div id="historySection" class="hidden bg-white/80 backdrop-blur-md p-6 rounded-lg shadow-lg w-full max-w-2xl text-gray-900 space-y-4">
+      <h3 class="text-xl font-bold text-center bg-gradient-to-r from-red-500 via-pink-400 to-red-500 bg-clip-text text-transparent">Recharge History</h3>
+      <div id="historyContainer" class="text-sm space-y-2"></div>
+      <button id="clearHistoryBtn" class="mt-4 w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+        Clear History
+      </button>
+    </div>
+  </div>
+
+  <!-- JS Logic -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const price = urlParams.get("price");
+    const validity = urlParams.get("validity");
+    const data = urlParams.get("data");
+
+    if (price) {
+      document.getElementById("amountInput").value = price;
+      document.getElementById("planDetails").innerHTML = `
+        <p><strong>Selected Plan:</strong> ₹${price}</p>
+        <p><strong>Validity:</strong> ${validity}</p>
+        <p><strong>Data:</strong> ${data}</p>
+      `;
+    }
+
+    document.getElementById("rechargeBtn").addEventListener("click", () => {
+      const mobile = document.getElementById("mobileInput").value.trim();
+      const amount = document.getElementById("amountInput").value.trim();
+      const confirmation = document.getElementById("confirmationMessage");
+
+      // ✅ Validate mobile number
+      if (!/^\d{10}$/.test(mobile)) {
+        confirmation.textContent = "Please enter a valid 10-digit mobile number.";
+        confirmation.classList.replace("text-green-600", "text-red-600");
+        return;
+      }
+
+      if (!amount) {
+        confirmation.textContent = "Please enter the recharge amount.";
+        confirmation.classList.replace("text-green-600", "text-red-600");
+        return;
+      }
+
+      const rechargeInfo = {
+        mobile,
+        amount,
+        validity: validity || "N/A",
+        data: data || "N/A",
+        time: new Date().toLocaleString()
+      };
+
+      const history = JSON.parse(localStorage.getItem("rechargeHistory") || "[]");
+      history.push(rechargeInfo);
+      localStorage.setItem("rechargeHistory", JSON.stringify(history));
+
+      confirmation.classList.replace("text-red-600", "text-green-600");
+      confirmation.innerHTML = `
+        Recharge successful for <strong>${mobile}</strong>!<br>
+        Amount: ₹${amount}<br>
+        Validity: ${rechargeInfo.validity}<br>
+        Data: ${rechargeInfo.data}
+      `;
+    });
+
+    function loadHistory() {
+      const history = JSON.parse(localStorage.getItem("rechargeHistory") || "[]");
+      const container = document.getElementById("historyContainer");
+      container.innerHTML = "";
+
+      if (history.length === 0) {
+        container.innerHTML = "<p>No recharge history found.</p>";
+        return;
+      }
+
+      history.slice().reverse().forEach(item => {
+        const div = document.createElement("div");
+        div.className = "bg-white/60 p-3 rounded shadow";
+        div.innerHTML = `
+          <strong>${item.mobile}</strong> • ₹${item.amount} • ${item.validity} • ${item.data} <br>
+          <span class="text-xs text-gray-600">${item.time}</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    document.getElementById("toggleHistoryBtn").addEventListener("click", () => {
+      const section = document.getElementById("historySection");
+      const button = document.getElementById("toggleHistoryBtn");
+
+      section.classList.toggle("hidden");
+
+      if (!section.classList.contains("hidden")) {
+        button.textContent = "Hide Recharge History";
+        loadHistory();
+      } else {
+        button.textContent = "View Recharge History";
+      }
+    });
+
+    document.getElementById("clearHistoryBtn").addEventListener("click", () => {
+      localStorage.removeItem("rechargeHistory");
+      loadHistory();
+    });
+  </script>
+</body>
+</html>

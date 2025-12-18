@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="relative min-h-screen font-sans"
+  style="background-image: url('https://i.pinimg.com/736x/50/d9/6e/50d96e0b385bb94ead0cf650ecdde6cd.jpg'); background-size: cover; background-position: center; color:#F1F1F1;">
+
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
+    <!-- Sign Up Card -->
+    <div class="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-2xl w-full max-w-md text-center space-y-6">
+      <h1 class="text-4xl font-extrabold animate-pulse bg-gradient-to-r from-[#FF6B6B] to-[#FFD93D] bg-clip-text text-transparent">
+        Sign Up
+      </h1>
+
+      <input id="signupName" type="text" placeholder="Full Name"
+             class="w-full px-4 py-2 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FFD93D]" />
+      <input id="signupEmail" type="email" placeholder="Email"
+             class="w-full px-4 py-2 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FFD93D]" />
+      <input id="signupPassword" type="password" placeholder="Password"
+             class="w-full px-4 py-2 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FFD93D]" />
+
+      <button id="signupBtn"
+              class="w-full py-2 rounded-full bg-gradient-to-r from-[#FF6B6B] to-[#FFD93D] text-white font-semibold hover:scale-105 transition transform shadow-lg">
+        Sign Up
+      </button>
+
+      <p id="signupMessage" class="text-sm text-gray-300 mt-2">
+        Already have an account? <a href="login.html" class="text-[#FFD93D] hover:underline">Login</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- JS Logic -->
+  <script>
+    const nameEl = document.getElementById("signupName");
+    const emailEl = document.getElementById("signupEmail");
+    const passEl = document.getElementById("signupPassword");
+    const messageEl = document.getElementById("signupMessage");
+    const btn = document.getElementById("signupBtn");
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    btn.addEventListener("click", () => {
+      const name = nameEl.value.trim();
+      const email = emailEl.value.trim();
+      const password = passEl.value.trim();
+
+      if (!name || !email || !password) {
+        messageEl.textContent = "Please fill all fields.";
+        messageEl.className = "text-sm mt-2 text-red-400";
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        messageEl.textContent = "Please enter a valid email.";
+        messageEl.className = "text-sm mt-2 text-red-400";
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users") || "{}");
+      if (users[email]) {
+        localStorage.setItem("signupRedirectMessage", "Account already exists. Please login.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      users[email] = { name, email, password, createdAt: new Date().toISOString() };
+      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("currentUser", email);
+
+      messageEl.textContent = "Signup successful! Redirecting…";
+      messageEl.className = "text-sm mt-2 text-green-400";
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 600);
+    });
+
+    [nameEl, emailEl, passEl].forEach(el => {
+      el.addEventListener("keydown", e => { if (e.key === "Enter") btn.click(); });
+    });
+  </script>
+</body>
+</html>

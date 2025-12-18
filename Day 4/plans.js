@@ -1,0 +1,88 @@
+const themes = {
+  jio: {
+    bg: "bg-gradient-to-br from-red-200 via-yellow-100 to-red-50",
+    title: "bg-gradient-to-r from-red-500 via-yellow-400 to-red-500"
+  },
+  airtel: {
+    bg: "bg-gradient-to-br from-red-300 via-red-100 to-red-50",
+    title: "bg-gradient-to-r from-red-600 via-red-400 to-red-600"
+  },
+  vi: {
+    bg: "bg-gradient-to-br from-pink-200 via-yellow-100 to-pink-50",
+    title: "bg-gradient-to-r from-pink-500 via-yellow-400 to-pink-500"
+  },
+  bsnl: {
+    bg: "bg-gradient-to-br from-blue-200 via-cyan-100 to-blue-50",
+    title: "bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500"
+  }
+};
+
+const params = new URLSearchParams(window.location.search);
+const network = params.get("network");
+
+if (network && themes[network]) {
+  document.body.className =
+    "min-h-screen text-gray-900 font-sans " + themes[network].bg;
+  document.getElementById("pageTitle").className =
+    "text-3xl font-bold bg-clip-text text-transparent " + themes[network].title;
+  document.getElementById("pageTitle").textContent =
+    network.toUpperCase() + " Recharge Plans";
+}
+
+let allPlans = [];
+
+async function fetchPlans() {
+  try {
+    const response = await fetch(
+      "https://6932782ae5a9e342d26f466b.mockapi.io/api/plans/PlanDetails"
+    );
+    allPlans = await response.json();
+    renderPlans(allPlans);
+  } catch (error) {
+    console.error("Error fetching plans:", error);
+    document.getElementById("plansContainer").innerHTML =
+      "<p class='text-red-600'>Failed to load plans.</p>";
+  }
+}
+
+function renderPlans(plans) {
+  const container = document.getElementById("plansContainer");
+  container.innerHTML = "";
+
+  plans.forEach((plan) => {
+    const card = document.createElement("div");
+    card.className =
+      "bg-white/70 p-4 rounded-lg shadow-md border border-gray-300 hover:shadow-xl transition cursor-pointer";
+
+    card.innerHTML = `
+      <h3 class="text-xl font-bold mb-1">₹${plan.price}</h3>
+      <p><strong>Data:</strong> ${plan.dailyData || "N/A"}</p>
+      <p><strong>Validity:</strong> ${plan.validity}</p>
+      <p><strong>Benefits:</strong> ${plan.benefits || "Unlimited Calls, OTT Access"}</p>
+      <p class="font-semibold text-sm text-gray-700">${plan.planName || "Recharge Pack"}</p>
+    `;
+
+    card.addEventListener("click", () => {
+      const query = new URLSearchParams({
+        price: plan.price,
+        validity: plan.validity,
+        data: plan.dailyData || "N/A"
+      }).toString();
+      window.location.href = `recharge.html?${query}`;
+    });
+
+    container.appendChild(card);
+  });
+}
+
+document.querySelector("input[type='text']").addEventListener("input", function () {
+  const query = this.value.toLowerCase();
+  const filtered = allPlans.filter((plan) =>
+    `${plan.price} ${plan.validity} ${plan.dailyData} ${plan.benefits} ${plan.planName}`
+      .toLowerCase()
+      .includes(query)
+  );
+  renderPlans(filtered);
+});
+
+fetchPlans();

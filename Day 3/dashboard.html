@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Recharge Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="relative min-h-screen font-sans"
+  style="background-image: url('https://i.pinimg.com/736x/50/d9/6e/50d96e0b385bb94ead0cf650ecdde6cd.jpg'); background-size: cover; background-position: center; color:#F1F1F1;">
+
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-6xl mx-auto p-6 space-y-10">
+
+    <!-- Header -->
+    <header class="flex justify-between items-center">
+      <h1 class="text-5xl font-extrabold tracking-wide animate-pulse bg-gradient-to-r from-[#FF6B6B] to-[#FFD93D] bg-clip-text text-transparent">
+        Dashboard
+      </h1>
+      <a href="landing.html" class="text-sm px-4 py-2 rounded-full bg-[#FF6B6B]/30 hover:bg-[#FFD93D]/50 transition shadow-lg">
+        Logout
+      </a>
+    </header>
+
+    <!-- Welcome Section -->
+    <section class="text-center space-y-4">
+      <h2 class="text-3xl font-bold bg-gradient-to-r from-[#FF6B6B] to-[#FFD93D] bg-clip-text text-transparent">
+        Welcome back!
+      </h2>
+      <p class="text-lg">Recharge your mobile instantly with just a click.</p>
+      <a href="plans.html" class="px-6 py-3 rounded-full hover:scale-105 transition transform shadow-lg font-semibold bg-gradient-to-r from-[#FF6B6B] to-[#FFD93D] text-white inline-block">
+        Go to Recharge
+      </a>
+    </section>
+
+    <!-- Mobile Network Options -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-6 bg-gradient-to-r from-[#FF6B6B] to-[#FFD93D] bg-clip-text text-transparent">
+        Choose Your Mobile Network
+      </h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+        <a href="plans.html?network=jio" class="backdrop-blur-md p-6 rounded-xl text-center transition transform hover:scale-105 shadow-lg ring-2 ring-transparent hover:ring-[#FFD93D]">
+          <span class="font-bold text-xl text-[#FFD93D]">Jio</span>
+        </a>
+        <a href="plans.html?network=airtel" class="backdrop-blur-md p-6 rounded-xl text-center transition transform hover:scale-105 shadow-lg ring-2 ring-transparent hover:ring-[#FFD93D]">
+          <span class="font-bold text-xl text-[#FFD93D]">Airtel</span>
+        </a>
+        <a href="plans.html?network=vi" class="backdrop-blur-md p-6 rounded-xl text-center transition transform hover:scale-105 shadow-lg ring-2 ring-transparent hover:ring-[#FFD93D]">
+          <span class="font-bold text-xl text-[#FFD93D]">Vi</span>
+        </a>
+        <a href="plans.html?network=bsnl" class="backdrop-blur-md p-6 rounded-xl text-center transition transform hover:scale-105 shadow-lg ring-2 ring-transparent hover:ring-[#FFD93D]">
+          <span class="font-bold text-xl text-[#FFD93D]">BSNL</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Popular Plans -->
+    <section>
+      <h2 class="text-xl font-semibold mt-10 mb-6 bg-gradient-to-r from-[#FF6B6B] to-[#FFD93D] bg-clip-text text-transparent">
+        🔥 Popular Plans
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+        <a href="recharge.html?price=199" class="p-6 rounded-xl shadow-lg transition transform hover:scale-105 hover:ring-2 hover:ring-[#FFD93D]" style="background-color:rgba(255,255,255,0.1); color:#F1F1F1;">
+          <img src="https://copilot.microsoft.com/th/id/BCO.177a8d14-fbd3-421d-8fae-4c7a20f15649.png" class="w-full h-auto rounded-lg mb-3 shadow-md">
+          <p class="font-bold text-lg">₹199</p>
+          <p>28 days • 1.5GB/day</p>
+        </a>
+
+        <a href="recharge.html?price=399" class="p-6 rounded-xl shadow-lg transition transform hover:scale-105 hover:ring-2 hover:ring-[#FFD93D]" style="background-color:rgba(255,255,255,0.1); color:#F1F1F1;">
+          <img src="https://copilot.microsoft.com/th/id/BCO.f896ca37-432d-4d3d-bc92-21c148b9985d.png" class="w-full h-auto rounded-lg mb-3 shadow-md">
+          <p class="font-bold text-lg">₹399</p>
+          <p>56 days • 2GB/day + OTT</p>
+        </a>
+
+        <a href="recharge.html?price=599" class="p-6 rounded-xl shadow-lg transition transform hover:scale-105 hover:ring-2 hover:ring-[#FFD93D]" style="background-color:rgba(255,255,255,0.1); color:#F1F1F1;">
+          <img src="https://copilot.microsoft.com/th/id/BCO.661e8b09-264e-4861-975e-a96e8479e1d4.png" class="w-full h-auto rounded-lg mb-3 shadow-md">
+          <p class="font-bold text-lg">₹599</p>
+          <p>84 days • 3GB/day</p>
+        </a>
+
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>
